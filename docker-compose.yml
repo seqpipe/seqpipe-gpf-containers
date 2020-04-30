@@ -1,0 +1,47 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: "${WDAE_DB_NAME}"
+      MYSQL_USER: "${WDAE_DB_USER}"
+      MYSQL_PASSWORD: "${WDAE_DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${WDAE_DB_PASSWORD}"
+    ports:
+    - "3306:3306"
+    expose:
+    - "3306"
+    networks:
+    - gpf_network
+  gunicorn:
+    build: ./gunicorn
+    image: gunicorn
+    env_file:
+    - ./.env
+    volumes:
+    - ./data-hg19-startup:/data
+    ports:
+    - "9901:9901"
+    expose:
+    - "9901"
+    networks:
+    - gpf_network
+    links:
+    - mysql
+  gpfjs:
+    build: ./gpfjs
+    image: gpfjs
+    ports:
+    - "80:80"
+    expose:
+    - "80"
+    networks:
+    - gpf_network
+    links:
+    - gunicorn
+
+networks:
+  gpf_network:
+    driver: bridge
