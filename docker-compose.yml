@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   mysql:
-    image: mysql
+    image: mysql:5.7
     restart: always
     environment:
       MYSQL_DATABASE: "${WDAE_DB_NAME}"
@@ -18,6 +18,8 @@ services:
   gunicorn:
     build: ./gunicorn
     image: gunicorn
+    depends_on:
+    - "mysql"
     env_file:
     - ./.env
     volumes:

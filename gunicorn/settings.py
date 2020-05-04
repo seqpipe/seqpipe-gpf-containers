@@ -1,6 +1,9 @@
 import os
+from .default_settings import *
 
 INSTALLED_APPS = [
+    "rest_framework",
+    "rest_framework.authtoken",
     "guardian",
     "django.contrib.admin",
     "django.contrib.messages",
@@ -8,8 +11,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.staticfiles",
     "django.contrib.sessions",
-    "rest_framework",
-    "rest_framework.authtoken",
     "utils",
     "gpf_instance",
     "gene_weights",
@@ -56,13 +57,13 @@ EMAIL_VERIFICATION_HOST = "https://{{ sparkgpf_public_name}}/{{ prefix }}"
 EMAIL_VERIFICATION_PATH = '/(popup:validate/{})'
 # EMAIL_OVERRIDE = ['lubomir.chorbadjiev@gmail.com']
 
-DEFAULT_RENDERER_CLASSES = (
-    "rest_framework.renderers.JSONRenderer"
-)
+DEFAULT_RENDERER_CLASSES = [
+    "rest_framework.renderers.JSONRenderer",
+]
 
 if DEBUG:
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + \
-        ("rest_framework.renderers.BrowsableAPIRenderer")
+        ["rest_framework.renderers.BrowsableAPIRenderer", ]
 
 REST_FRAMEWORK = {
     'PAGINATE_BY': 10,
