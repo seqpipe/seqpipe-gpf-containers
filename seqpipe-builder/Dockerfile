@@ -1,0 +1,36 @@
+FROM amd64/ubuntu:18.04
+
+SHELL ["/bin/bash", "-c"]
+
+RUN apt-get update --fix-missing && \
+	apt-get install -y build-essential gcc vim wget curl git libgl1-mesa-glx apache2 sudo && \
+	apt-get clean
+
+RUN mkdir -p /root/.conda/
+
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh -O /anaconda.sh && \
+    /bin/bash /anaconda.sh -b -p /opt/conda && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/ && \
+    rm /anaconda.sh
+
+RUN /opt/conda/bin/conda init bash
+
+ENV PATH /opt/conda/bin:$PATH
+
+RUN pip install beautifulsoup4
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+
+RUN apt install -y nodejs
+
+RUN npm install -g @angular/cli
+# RUN npm install -g protractor
+
+RUN mkdir /.npm && chmod -R 0777 /.npm
+RUN mkdir /.config && chmod -R 0777 /.config
+
+RUN mkdir -p /work
+
+WORKDIR /work
+
+CMD ["/bin/bash"]

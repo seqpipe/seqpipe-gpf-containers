@@ -1,48 +1,52 @@
 version: '3.1'
 
 services:
-  mysql:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_DATABASE: "${WDAE_DB_NAME}"
-      MYSQL_USER: "${WDAE_DB_USER}"
-      MYSQL_PASSWORD: "${WDAE_DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${WDAE_DB_PASSWORD}"
-    ports:
-    - "3306:3306"
-    expose:
-    - "3306"
-    networks:
-    - gpf_network
-  gunicorn:
-    build: ./gunicorn
-    image: gunicorn
-    depends_on:
-    - "mysql"
-    env_file:
-    - ./.env
-    volumes:
-    - ./data-hg19-startup:/data
-    ports:
-    - "9901:9901"
-    expose:
-    - "9901"
-    networks:
-    - gpf_network
-    links:
-    - mysql
+  # mysql:
+  #   image: mysql:5.7
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: "${WDAE_DB_NAME}"
+  #     MYSQL_USER: "${WDAE_DB_USER}"
+  #     MYSQL_PASSWORD: "${WDAE_DB_PASSWORD}"
+  #     MYSQL_ROOT_PASSWORD: "${WDAE_DB_PASSWORD}"
+  #   ports:
+  #   - "3306:3306"
+  #   expose:
+  #   - "3306"
+  #   networks:
+  #   - gpf_network
+  # gunicorn:
+  #   build: ./gunicorn
+  #   image: gunicorn
+  #   depends_on:
+  #   - "mysql"
+  #   env_file:
+  #   - ./.env
+  #   volumes:
+  #   - ./data-hg19-startup:/data
+  #   ports:
+  #   - "9901:9901"
+  #   expose:
+  #   - "9901"
+  #   networks:
+  #   - gpf_network
+  #   links:
+  #   - mysql
+
   gpfjs:
-    build: ./gpfjs
-    image: gpfjs
+    image: seqpipe/seqpipe-gpfjs:latest
+    volumes:
+      - "./seqpipe-gpfjs/sites-available:/etc/apache2/sites-available"
+    environment:
+      - GPF_SITES="localhost"
     ports:
     - "80:80"
     expose:
     - "80"
     networks:
     - gpf_network
-    links:
-    - gunicorn
+    # links:
+    # - gunicorn
 
 networks:
   gpf_network:
