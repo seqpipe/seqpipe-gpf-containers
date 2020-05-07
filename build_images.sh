@@ -40,6 +40,8 @@ cd seqpipe-gpf
 ./build_gpf.sh ${TAG}
 cd -
 
+
+
 ((GPF_BUILD+=1))
 echo "NEXT_GPF_BUILD=${GPF_BUILD}"
 
