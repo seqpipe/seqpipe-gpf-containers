@@ -149,12 +149,12 @@ LOGGING = {
         # Log to a text file that can be rotated by logrotate
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/code/gpf/logs/wdae-api.log',
+            'filename': '/logs/wdae-api.log',
             'formatter': 'verbose',
         },
         'logdebug': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/code/gpf/logs/wdae-debug.log',
+            'filename': '/logs/wdae-debug.log',
             'formatter': 'verbose',
         },
     },

@@ -7,6 +7,6 @@ exec /opt/conda/envs/gpf/bin/gunicorn \
     --threads=8 \
     --bind=0.0.0.0:9001 \
     --timeout=300 \
-    --access-logfile /code/gpf/logs/access.log \
-    --error-logfile /code/gpf/logs/error.log \
+    --access-logfile /logs/access.log \
+    --error-logfile /logs/error.log \
     wdae.gunicorn_wsgi:application

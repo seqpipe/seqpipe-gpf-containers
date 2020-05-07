@@ -10,18 +10,23 @@ if [ -z $VERSION_NUMBER ]; then
     export VERSION_NUMBER=3.0.0b
 fi
 
-if [ -f "BUILD_NUMBER.txt" ];
+if [ -f "GPF_BUILD.txt" ];
 then
-    export BUILD_NUMBER=$(cat BUILD_NUMBER.txt)
+    export GPF_BUILD=$(cat GPF_BUILD.txt)
 fi
-if [ -z $BUILD_NUMBER ]; then
-    export BUILD_NUMBER=1
+if [ -z $GPF_BUILD ]; then
+    export GPF_BUILD=1
 fi
 
 echo "VERSION     : ${VERSION_NUMBER}"
+echo "GPF_BUILD   : ${GPF_BUILD}"
 echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 
-export TAG="${VERSION_NUMBER}${BUILD_NUMBER}"
+if [ -z $BUILD_NUMBER ]; then
+    export TAG="${VERSION_NUMBER}_${GPF_BUILD}"
+else
+    export TAG="${VERSION_NUMBER}_${GPF_BUILD}_${BUILD_NUMBER}"
+fi
 
 echo "TAG         : $TAG"
 
@@ -31,8 +36,11 @@ cd seqpipe-gpfjs
 ./build_gpfjs.sh ${TAG}
 cd -
 
+cd seqpipe-gpf
+./build_gpf.sh ${TAG}
+cd -
 
-((BUILD_NUMBER+=1))
-echo "NEXT_BUILD_NUMBER=${BUILD_NUMBER}"
+((GPF_BUILD+=1))
+echo "NEXT_GPF_BUILD=${GPF_BUILD}"
 
-echo $BUILD_NUMBER > BUILD_NUMBER.txt
+echo $GPF_BUILD > GPF_BUILD.txt

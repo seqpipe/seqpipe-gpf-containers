@@ -1,35 +1,48 @@
-FROM seqpipe-anaconda-base
+FROM seqpipe/seqpipe-anaconda-base:latest
 
-RUN conda create --name gpf && conda install --name gpf -c defaults -c conda-forge -c iossifovlab -c bioconda gpf_wdae
 
-RUN conda install --name gpf -c conda-forge gunicorn mysqlclient
+# RUN git clone https://github.com/iossifovlab/gpf.git
+COPY gpf/conda-environment.yml /
 
-RUN conda install --name gpf -c conda-forge -c anaconda mysql-connector-python
+RUN conda create \
+    -c defaults -c conda-forge -c iossifovlab -c bioconda \
+    -n gpf --file /conda-environment.yml
+    
+RUN conda install -n gpf -c defaults -c conda-forge gunicorn mysqlclient
+RUN conda install -n gpf -c defaults -c conda-forge -c anaconda mysql-connector-python
 
-RUN mkdir -p /code/gpf
+RUN conda update -n base -c defaults conda
 
-WORKDIR /code/gpf
+RUN mkdir -p /code
+WORKDIR /code
+COPY gpf /code
 
-RUN git clone https://github.com/iossifovlab/gpf.git
+# GPF ENV
+ENV PATH /opt/conda/envs/gpf/bin:$PATH
 
-WORKDIR /code/gpf/gpf/wdae
+# HADOOP CONFIG
+ENV JAVA_HOME /opt/conda/envs/gpf
+ENV HADOOP_HOME /opt/conda/envs/gpf
+ENV HADOOP_CONF_DIR /opt/conda/envs/gpf/etc/hadoop
 
-COPY ./start_gunicorn.sh /code/gpf/gpf/wdae/start_gunicorn.sh
 
-COPY ./gpf_index.wsgi /code/gpf/gpf/wdae/wdae/wdae/wsgi.py
+WORKDIR /code/wdae
+COPY ./start_gunicorn.sh /code/start_gunicorn.sh
 
-COPY ./gpf_index.wsgi /code/gpf/gpf/wdae/wdae/wdae/gunicorn_wsgi.py
+COPY ./gpf_index.wsgi /code/wdae/wdae/wdae/wsgi.py
 
-COPY ./settings.py /code/gpf/gpf/wdae/wdae/wdae/settings.py
+COPY ./gpf_index.wsgi /code/wdae/wdae/wdae/gunicorn_wsgi.py
 
-RUN mkdir -p /code/gpf/logs
+COPY ./settings.py /code/wdae/wdae/wdae/settings.py
 
-RUN /opt/conda/envs/gpf/bin/pip install -e /code/gpf/gpf/wdae
+RUN cd /code/dae && pip install . && cd /code/wdae && pip install . && cd /code
 
-COPY ./wdaemanage.py /code/gpf/gpf/wdae/wdae/wdaemanage.py
+RUN mkdir -p /logs
 
-RUN ln -s /code/gpf/gpf/wdae/wdae/wdaemanage.py /bin/wdaemanage.py
+COPY ./wdaemanage.py /code/wdae/wdae/wdaemanage.py
 
-CMD /code/gpf/gpf/wdae/wdae/wdae_bootstrap.sh && /code/gpf/gpf/wdae/start_gunicorn.sh
+RUN ln -s /code/wdae/wdae/wdaemanage.py /bin/wdaemanage.py
 
-EXPOSE 9001
+CMD /code/wdae/wdae/wdaemanage.py migrate && /code/start_gunicorn.sh
+
+EXPOSE 9001 9002
