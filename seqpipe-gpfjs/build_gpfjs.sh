@@ -45,5 +45,5 @@ docker build . -t seqpipe/seqpipe-gpfjs:${TAG} --build-arg VERSION_TAG=${TAG}
 docker build . -t seqpipe/seqpipe-gpfjs:latest --build-arg VERSION_TAG=${TAG}
 
 cd gpfjs
-git tag ${TAG}
+git tag -f ${TAG}
 cd -
