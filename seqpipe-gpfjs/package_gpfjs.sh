@@ -21,7 +21,7 @@ ng build --prod --aot --configuration 'hg19' --base-href '/gpf19/' --deploy-url 
 
 python ppindex.py
 
-cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf19-${TAG}.tar.gz . && cd /work/gpfjs
+cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf19-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf19-${TAG}.tar.gz gpfjs-dist-gpf19-latest.tar.gz
 
 rm -rf dist 
 ng build --prod --aot --configuration 'hg38' --base-href '/gpf38/' --deploy-url '/gpf38/'
@@ -29,7 +29,7 @@ ng build --prod --aot --configuration 'hg38' --base-href '/gpf38/' --deploy-url 
 
 python ppindex.py
 
-cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf38-${TAG}.tar.gz . && cd /work/gpfjs
+cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf38-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf38-${TAG}.tar.gz gpfjs-dist-gpf38-latest.tar.gz
 
 
 
