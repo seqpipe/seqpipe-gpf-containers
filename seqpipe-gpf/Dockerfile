@@ -1,5 +1,11 @@
 FROM seqpipe/seqpipe-anaconda-base:latest
 
+RUN apt-get update --fix-missing && \
+	apt-get install -y build-essential gcc vim wget curl git libgl1-mesa-glx \
+		supervisor less vim \
+    	inetutils-ping net-tools apt-utils && \
+		apt-get clean
+
 
 # RUN git clone https://github.com/iossifovlab/gpf.git
 COPY gpf/conda-environment.yml /
@@ -27,7 +33,6 @@ ENV HADOOP_CONF_DIR /opt/conda/envs/gpf/etc/hadoop
 
 
 WORKDIR /code/wdae
-COPY ./start_gunicorn.sh /code/start_gunicorn.sh
 
 COPY ./gpf_index.wsgi /code/wdae/wdae/wdae/wsgi.py
 
@@ -43,6 +48,14 @@ COPY ./wdaemanage.py /code/wdae/wdae/wdaemanage.py
 
 RUN ln -s /code/wdae/wdae/wdaemanage.py /bin/wdaemanage.py
 
-CMD /code/wdae/wdae/wdaemanage.py migrate && /code/start_gunicorn.sh
+# CMD /code/wdae/wdae/wdaemanage.py migrate && /code/start_gunicorn.sh
+
+ADD ./supervisor/supervisord.conf /etc/
+ADD ./bin/supervisord-bootstrap.sh /
+ADD ./bin/wait-for-it.sh /
+RUN chmod +x /*.sh
 
 EXPOSE 9001 9002
+
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
+

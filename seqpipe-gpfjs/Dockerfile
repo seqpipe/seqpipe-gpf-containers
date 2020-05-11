@@ -3,8 +3,11 @@ FROM amd64/ubuntu:18.04 as gpfjs-base
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update --fix-missing && \
-	apt-get install -y build-essential gcc vim wget curl git libgl1-mesa-glx apache2 && \
-	apt-get clean
+	apt-get install -y build-essential gcc vim wget curl git libgl1-mesa-glx \
+		supervisor less vim \
+    	inetutils-ping net-tools apt-utils \
+		apache2 && \
+		apt-get clean
 
 ARG VERSION_TAG
 
@@ -34,10 +37,15 @@ RUN cat /etc/hostname | awk '{print "ServerName "$1}' >> /etc/apache2/apache2.co
 
 RUN rm /etc/apache2/sites-enabled/000-default.conf
 
-COPY bin/bootstrap.sh /
+ADD ./supervisor/supervisord.conf /etc/
+ADD ./bin/supervisord-bootstrap.sh /
+ADD ./bin/wait-for-it.sh /
+RUN chmod +x /*.sh
 
 EXPOSE 80 443
 
-CMD ["/bootstrap.sh"]
+# CMD ["/bootstrap.sh"]
 # CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
 
