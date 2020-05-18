@@ -49,11 +49,18 @@ if os.environ.get("WDAE_EMAIL_HOST", None):
     EMAIL_HOST_PASSWORD = os.environ.get("WDAE_EMAIL_HOST_PASSWORD", None)
 
     EMAIL_PORT = os.environ.get("WDAE_EMAIL_PORT", None)
+    if EMAIL_PORT is not None:
+        EMAIL_PORT = int(EMAIL_PORT)
+
     EMAIL_SUBJECT_PREFIX = '[GPF] '
     EMAIL_USE_TLS = True
 
 
-EMAIL_VERIFICATION_HOST = "https://{{ sparkgpf_public_name}}/{{ prefix }}"
+WDAE_PUBLIC_HOSTNAME = os.environ.get("WDAE_PUBLIC_HOSTNAME")
+WDAE_PREFIX = os.environ.get("WDAE_PREFIX")
+
+
+EMAIL_VERIFICATION_HOST = f"https://{ WDAE_PUBLIC_HOSTNAME }/{ WDAE_PREFIX }"
 EMAIL_VERIFICATION_PATH = '/(popup:validate/{})'
 # EMAIL_OVERRIDE = ['lubomir.chorbadjiev@gmail.com']
 
@@ -120,67 +127,74 @@ PRELOAD_CONFIG = {
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}
     },
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d "
+            "%(thread)d %(message)s"
         },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
         },
         # Log to a text file that can be rotated by logrotate
-        'logfile': {
-            'class': 'logging.handlers.WatchedFileHandler',
+        "logfile": {
+            "class": "logging.handlers.WatchedFileHandler",
             'filename': '/logs/wdae-api.log',
-            'formatter': 'verbose',
+            "filters": ["require_debug_false"],
+            "formatter": "verbose",
         },
-        'logdebug': {
-            'class': 'logging.handlers.WatchedFileHandler',
+        "logdebug": {
+            "class": "logging.handlers.WatchedFileHandler",
             'filename': '/logs/wdae-debug.log',
-            'formatter': 'verbose',
+            "formatter": "verbose",
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'logfile'],
-            'propagate': True,
-            'level': 'WARN',
+    "loggers": {
+        "django": {
+            "handlers": ["logfile", "logdebug"],
+            "propagate": True,
+            "level": "INFO",
         },
-        'django.request': {
-            'handlers': ['console', 'logfile'],
-            'level': 'WARN',
-            'propagate': True,
+        # 'django.request': {
+        #     'handlers': ['console'],
+        #     'level': 'WARN',
+        #     'propagate': True,
+        # },
+        "wdae.api": {
+            "handlers": ["logfile"],
+            "level": "DEBUG",
+            "propagate": True,
         },
-        'wdae.api': {
-            'handlers': ['console', 'logfile'],
-            'level': 'INFO',
-            'propagate': True,
+        "impala": {
+            "handlers": ["console", "logdebug"],  # 'logfile'],
+            "level": "INFO",
+            "propagate": True,
         },
-        '': {
-            'handlers': ['console', 'logdebug'],  # 'logfile'],
-            'level': 'DEBUG',
-            'propagate': True,
+        "matplotlib": {
+            "handlers": ["console", "logdebug"],  # 'logfile'],
+            "level": "INFO",
+            "propagate": True,
         },
-
-    }
+        "": {
+            "handlers": ["console", "logdebug"],  # 'logfile'],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
 }
 
 
