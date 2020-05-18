@@ -55,6 +55,8 @@ ADD ./bin/supervisord-bootstrap.sh /
 ADD ./bin/wait-for-it.sh /
 RUN chmod +x /*.sh
 
+RUN mkdir -p /data
+
 EXPOSE 9001 9002
 
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
