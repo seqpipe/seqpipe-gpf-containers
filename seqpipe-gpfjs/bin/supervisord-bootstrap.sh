@@ -2,6 +2,12 @@
 
 set -e
 
+if [[ ! -z "${GOOGLE_ANALYTICS_UA}" ]]; then
+
+sed -i "s/\/\/ GA call/ga('create', '${GOOGLE_ANALYTICS_UA}', 'auto');\n ga('send', 'pageview');/g" /site/gpf19/index.html
+sed -i "s/\/\/ GA call/ga('create', '${GOOGLE_ANALYTICS_UA}', 'auto');\n ga('send', 'pageview');/g" /site/gpf38/index.html
+
+fi
 
 for sitename in ${APACHE2_GPF_SITES}; do
     echo "enabling apache site: ${sitename}..."
