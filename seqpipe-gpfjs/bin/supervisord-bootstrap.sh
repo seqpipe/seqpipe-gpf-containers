@@ -4,8 +4,8 @@ set -e
 
 if [[ ! -z "${GOOGLE_ANALYTICS_UA}" ]]; then
 
-sed -i "s/\/\/ GA call/ga('create', '${GOOGLE_ANALYTICS_UA}', 'auto');\n ga('send', 'pageview');/g" /site/gpf19/index.html
-sed -i "s/\/\/ GA call/ga('create', '${GOOGLE_ANALYTICS_UA}', 'auto');\n ga('send', 'pageview');/g" /site/gpf38/index.html
+sed -i "s/\/\/ gtag/gtag('config', '${GOOGLE_ANALYTICS_UA}');/g" /site/gpf19/index.html
+sed -i "s/\/\/ gtag/gtag('config', '${GOOGLE_ANALYTICS_UA}');/g" /site/gpf38/index.html
 
 fi
 
