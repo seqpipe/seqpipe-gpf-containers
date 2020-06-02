@@ -1,37 +1,57 @@
 import os
 from .default_settings import *
 
-INSTALLED_APPS = [
-    "rest_framework",
-    "rest_framework.authtoken",
-    "guardian",
-    "django.contrib.admin",
-    "django.contrib.messages",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.staticfiles",
-    "django.contrib.sessions",
-    "utils",
-    "gpf_instance",
-    "gene_weights",
-    "gene_sets",
-    "datasets_api",
-    "genotype_browser",
-    "enrichment_api",
-    "measures_api",
-    "family_counters_api",
-    "pheno_browser_api",
-    "common_reports_api",
-    "pheno_tool_api",
-    "users_api",
-    "groups_api",
-    # 'gpfjs',
-    "chromosome",
-    "query_state_save",
-    "user_queries",
-]
+# INSTALLED_APPS += [
+#     "rest_framework",
+#     "rest_framework.authtoken",
+#     "guardian",
+#     "django.contrib.admin",
+#     "django.contrib.messages",
+#     "django.contrib.auth",
+#     "django.contrib.contenttypes",
+#     "django.contrib.staticfiles",
+#     "django.contrib.sessions",
+#     "utils",
+#     "gpf_instance",
+#     "gene_weights",
+#     "gene_sets",
+#     "datasets_api",
+#     "genotype_browser",
+#     "enrichment_api",
+#     "measures_api",
+#     "family_counters_api",
+#     "pheno_browser_api",
+#     "common_reports_api",
+#     "pheno_tool_api",
+#     "users_api",
+#     "groups_api",
+#     # 'gpfjs',
+#     "chromosome",
+#     "query_state_save",
+#     "user_queries",
+# ]
+
 
 SECRET_KEY = os.environ.get("WDAE_SECRET_KEY")
+
+STUDIES_EAGER_LOADING = True
+
+
+if os.environ.get("SENTRY_API_URL", None):
+    import raven
+
+    INSTALLED_APPS += [
+        'raven.contrib.django.raven_compat',
+    ]
+
+    RAVEN_CONFIG = {
+        'dsn': os.environ.get("SENTRY_API_URL", None),
+        # If you are using git, you can also automatically configure the
+        # release based on the git info.
+        # 'release': raven.fetch_git_sha(os.path.dirname(__file__)),
+    }
+
+
 
 DEBUG = os.environ.get("WDAE_DEBUG", "False") == "True"
 
@@ -91,39 +111,13 @@ DATABASES = {
     }
 }
 
-PRELOAD_ACTIVE = True
-
 ALLOWED_HOSTS = [
     os.environ.get("WDAE_ALLOWED_HOST")
 ]
 
 TIME_ZONE = "US/Eastern"
 
-STATIC_ROOT = '/code/gpf/static'
-
-
-PRECOMPUTE_CONFIG = {
-    'synonymousBackgroundModel':
-    'enrichment_api.background_precompute.SynonymousBackgroundPrecompute',
-    'codingLenBackgroundModel':
-    'enrichment_api.background_precompute.CodingLenBackgroundPrecompute',
-    'samochaBackgroundModel':
-    'enrichment_api.background_precompute.SamochaBackgroundPrecompute',
-    'variant_reports':
-    'common_reports_api.variants.VariantReports',
-    'studies_summaries':
-    'common_reports_api.studies.StudiesSummaries',
-    'datasets': 'datasets_api.datasets_preload.DatasetsPreload',
-}
-
-PRELOAD_CONFIG = {
-    'gene_sets_collections':
-    'gene_sets.preloaded_gene_sets.GeneSetsCollectionsPreload',
-    'gene_weights': 'gene_weights.weights.Weights',
-    'genomic_scores': 'genomic_scores_api.scores.Scores',
-    'datasets': 'datasets_api.datasets_preload.DatasetsPreload',
-
-}
+# STATIC_ROOT = '/code/gpf/static'
 
 
 LOGGING = {
@@ -231,21 +225,3 @@ CACHES = {
     },
 }
 
-
-PRECOMPUTE_CONFIG = {
-    'synonymousBackgroundModel':
-    'enrichment_api.background_precompute.SynonymousBackgroundPrecompute',
-    'codingLenBackgroundModel':
-    'enrichment_api.background_precompute.CodingLenBackgroundPrecompute',
-    'samochaBackgroundModel':
-    'enrichment_api.background_precompute.SamochaBackgroundPrecompute',
-    # 'denovo_gene_sets':
-    # 'api.gene_sets.denovo.PrecomputeDenovoGeneSets',
-    'variant_reports':
-    'common_reports_api.variants.VariantReports',
-    'studies_summaries':
-    'common_reports_api.studies.StudiesSummaries',
-    'datasets': 'datasets_api.datasets_preload.DatasetsPreload',
-}
-
-STATIC_URL = '/dae/static/'
