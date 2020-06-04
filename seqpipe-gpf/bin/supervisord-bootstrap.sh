@@ -2,6 +2,11 @@
 
 set -e
 
+for impala_host in ${IMPALA_HOSTS}; do
+    echo "waiting for impala on ${impala_host}..."
+    /wait-for-it.sh ${impala_host}:25000 -t 300
+    echo "done..."
+done
 
 /code/wdae/wdae/wdaemanage.py migrate
 
@@ -18,5 +23,5 @@ if [ $rc -ne 0 ]; then
 fi
 
 echo -e "\n\n------------------------------------------------------------------------"
-echo -e "gpf19 gunicorn running..."
+echo -e "gpf gunicorn running..."
 echo -e "------------------------------------------------------------------------\n\n"
