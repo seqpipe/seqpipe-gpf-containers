@@ -13,11 +13,13 @@ ARG VERSION_TAG
 
 COPY gpfjs-dist-gpf19-${VERSION_TAG}.tar.gz /
 COPY gpfjs-dist-gpf38-${VERSION_TAG}.tar.gz /
+COPY gpfjs-dist-gpf_test-${VERSION_TAG}.tar.gz /
 
-RUN mkdir -p /site/gpf19 && mkdir -p /site/gpf38
+RUN mkdir -p /site/gpf19 && mkdir -p /site/gpf38 && mkdir -p /site/gpf_test
 
 RUN tar zxvf /gpfjs-dist-gpf19-${VERSION_TAG}.tar.gz -C /site/gpf19
 RUN tar zxvf /gpfjs-dist-gpf38-${VERSION_TAG}.tar.gz -C /site/gpf38
+RUN tar zxvf /gpfjs-dist-gpf_test-${VERSION_TAG}.tar.gz -C /site/gpf_test
 
 WORKDIR /site
 

@@ -15,17 +15,19 @@ then
     export GPF_BUILD=$(cat GPF_BUILD.txt)
 fi
 if [ -z $GPF_BUILD ]; then
-    export GPF_BUILD=1
+    export GPF_BUILD=0
 fi
+
+((GPF_BUILD+=1))
 
 echo "VERSION     : ${VERSION_NUMBER}"
 echo "GPF_BUILD   : ${GPF_BUILD}"
 echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 
 if [ -z $BUILD_NUMBER ]; then
-    export TAG="${VERSION_NUMBER}${GPF_BUILD}"
+    export TAG="${VERSION_NUMBER}.b${GPF_BUILD}"
 else
-    export TAG="${VERSION_NUMBER}${GPF_BUILD}_${BUILD_NUMBER}"
+    export TAG="${VERSION_NUMBER}.b${GPF_BUILD}_${BUILD_NUMBER}"
 fi
 
 echo "TAG         : $TAG"
@@ -62,12 +64,8 @@ git push origin --tags
 cd -
 
 git tag -f ${TAG}
-
-((GPF_BUILD+=1))
-echo "NEXT_GPF_BUILD=${GPF_BUILD}"
-
 echo $GPF_BUILD > GPF_BUILD.txt
 
 git add GPF_BUILD.txt
 git commit -m "new build done"
-# git push origin --tags
+git push origin --tags

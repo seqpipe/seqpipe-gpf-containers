@@ -32,6 +32,13 @@ python ppindex.py
 cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf38-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf38-${TAG}.tar.gz gpfjs-dist-gpf38-latest.tar.gz
 
 
+rm -rf dist 
+ng build --prod --aot --configuration 'hg_test' --base-href '/gpf_test/' --deploy-url '/gpf_test/'
+
+python ppindex.py
+
+cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf_test-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf_test-${TAG}.tar.gz gpfjs-dist-gpf_test-latest.tar.gz
+
 
 
 
