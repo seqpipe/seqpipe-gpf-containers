@@ -11,6 +11,14 @@ else
 fi
 
 
+if [ "$2" ]; then
+    export BRANCH=$2
+    echo "BRANCH=${BRANCH}"
+else
+    echo 'ERROR: requires a non-empty BRANCH'
+    exit 1
+fi
+
 if [ -z $WORKSPACE ];
 then
     export WORKSPACE=`pwd`
@@ -26,8 +34,9 @@ fi
 cd gpf
 
 git clean --force
-git checkout master
 git checkout .
+git pull
+git checkout $BRANCH
 git pull
 
 cd -

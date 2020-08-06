@@ -10,6 +10,14 @@ else
     exit 1
 fi
 
+if [ "$2" ]; then
+    export BRANCH=$2
+    echo "BRANCH=${BRANCH}"
+else
+    echo 'ERROR: requires a non-empty BRANCH'
+    exit 1
+fi
+
 
 if [ -z $WORKSPACE ];
 then
@@ -26,7 +34,7 @@ fi
 cd gpfjs
 
 git clean --force
-git checkout master
+git checkout $BRANCH
 git checkout .
 git pull
 

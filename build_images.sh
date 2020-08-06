@@ -7,7 +7,8 @@ then
     export VERSION_NUMBER=$(cat VERSION_NUMBER.txt)
 fi
 if [ -z $VERSION_NUMBER ]; then
-    export VERSION_NUMBER=3.0.0.beta
+    echo "Version number not found..."
+    exit 1
 fi
 
 if [ -f "GPF_BUILD.txt" ];
@@ -20,27 +21,30 @@ fi
 
 ((GPF_BUILD+=1))
 
+export BRANCH="release-3.0.0"
+
 echo "VERSION     : ${VERSION_NUMBER}"
 echo "GPF_BUILD   : ${GPF_BUILD}"
 echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 
 if [ -z $BUILD_NUMBER ]; then
-    export TAG="${VERSION_NUMBER}.b${GPF_BUILD}"
+    export TAG="${VERSION_NUMBER}.${GPF_BUILD}"
 else
-    export TAG="${VERSION_NUMBER}.b${GPF_BUILD}_${BUILD_NUMBER}"
+    export TAG="${VERSION_NUMBER}.${GPF_BUILD}_${BUILD_NUMBER}"
 fi
 
 echo "TAG         : $TAG"
+echo "BRANCH      : $BRANCH"
 
 docker build seqpipe-builder/ -t "seqpipe/seqpipe-builder:${TAG}"
 docker build seqpipe-builder/ -t "seqpipe/seqpipe-builder:latest"
 
 cd seqpipe-gpfjs
-./build_gpfjs.sh ${TAG}
+./build_gpfjs.sh ${TAG} ${BRANCH}
 cd -
 
 cd seqpipe-gpf
-./build_gpf.sh ${TAG}
+./build_gpf.sh ${TAG} ${BRANCH}
 cd -
 
 docker push seqpipe/seqpipe-builder:${TAG}
