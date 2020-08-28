@@ -16,28 +16,35 @@ rm -rf node_modules package-lock.json
 npm install
 
 rm -rf dist 
-ng build --prod --aot --configuration 'hg19' --base-href '/gpf19/' --deploy-url '/gpf19/'
-# npm run build -- --prod --aot --configuration gpf19 --deploy-url=/gpf19/ --base-href=/gpf19/
+ng build --prod --aot --configuration 'hg19' --base-href '/hg19/' --deploy-url '/hg19/'
 
 python ppindex.py
 
-cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf19-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf19-${TAG}.tar.gz gpfjs-dist-gpf19-latest.tar.gz
+cd /work/gpfjs/dist/gpfjs && \
+    tar zcvf /work/gpfjs-dist-hg19-${TAG}.tar.gz . && \
+    cd /work/gpfjs # && \
+    # ln -sf gpfjs-dist-hg19-${TAG}.tar.gz gpfjs-dist-hg19-latest.tar.gz
 
 rm -rf dist 
-ng build --prod --aot --configuration 'hg38' --base-href '/gpf38/' --deploy-url '/gpf38/'
-# npm run build -- --prod --aot --configuration gpf19 --deploy-url=/gpf19/ --base-href=/gpf19/
+ng build --prod --aot --configuration 'hg38' --base-href '/hg38/' --deploy-url '/hg38/'
 
 python ppindex.py
 
-cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf38-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf38-${TAG}.tar.gz gpfjs-dist-gpf38-latest.tar.gz
+cd /work/gpfjs/dist/gpfjs && \
+    tar zcvf /work/gpfjs-dist-hg38-${TAG}.tar.gz . && \
+    cd /work/gpfjs # && \
+    # ln -sf gpfjs-dist-hg38-${TAG}.tar.gz gpfjs-dist-hg38-latest.tar.gz
 
 
 rm -rf dist 
-ng build --prod --aot --configuration 'hg_test' --base-href '/gpf_test/' --deploy-url '/gpf_test/'
+ng build --prod --aot --configuration 'hg_test' --base-href '/hg_test/' --deploy-url '/hg_test/'
 
 python ppindex.py
 
-cd /work/gpfjs/dist/gpfjs && tar zcvf /work/gpfjs-dist-gpf_test-${TAG}.tar.gz . && cd /work/gpfjs && ln -sf gpfjs-dist-gpf_test-${TAG}.tar.gz gpfjs-dist-gpf_test-latest.tar.gz
+cd /work/gpfjs/dist/gpfjs && \
+    tar zcvf /work/gpfjs-dist-hg_test-${TAG}.tar.gz . &&\
+    cd /work/gpfjs # && \
+    # ln -sf gpfjs-dist-hg_test-${TAG}.tar.gz gpfjs-dist-hg_test-latest.tar.gz
 
 
 

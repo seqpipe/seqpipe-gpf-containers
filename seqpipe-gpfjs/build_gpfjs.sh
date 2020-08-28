@@ -31,6 +31,22 @@ then
     git clone git@github.com:iossifovlab/gpfjs.git
 fi
 
+
+export PRODUCTION_TAG="3.0.0.80"
+echo "Production build star: ${PRODUCTION_TAG}"
+cd gpfjs
+git clean --force
+git checkout master
+git checkout "${PRODUCTION_TAG}"
+cd -
+
+docker run \
+    -v "${WORKSPACE}:/work" \
+    --user 1000:1000 \
+    "seqpipe/seqpipe-builder:${PRODUCTION_TAG}" \
+    /work/package_gpfjs_gpf.sh ${PRODUCTION_TAG}
+
+
 cd gpfjs
 
 git clean --force

@@ -2,3 +2,4 @@ data-hg19
 data-hg19-startup
 temp
 seqpipe-gpf/gpf/
+seqpipe-gpfjs/gpfjs-dist-*.tar.gz

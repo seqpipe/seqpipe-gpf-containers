@@ -9,17 +9,31 @@ RUN apt-get update --fix-missing && \
 		apache2 && \
 		apt-get clean
 
-ARG VERSION_TAG
 
-COPY gpfjs-dist-gpf19-${VERSION_TAG}.tar.gz /
-COPY gpfjs-dist-gpf38-${VERSION_TAG}.tar.gz /
-COPY gpfjs-dist-gpf_test-${VERSION_TAG}.tar.gz /
+# PRODUCTION: 3.0.0.80
+COPY gpfjs-dist-gpf19-3.0.0.80.tar.gz /
+COPY gpfjs-dist-gpf38-3.0.0.80.tar.gz /
+COPY gpfjs-dist-gpf_test-3.0.0.80.tar.gz /
 
 RUN mkdir -p /site/gpf19 && mkdir -p /site/gpf38 && mkdir -p /site/gpf_test
 
-RUN tar zxvf /gpfjs-dist-gpf19-${VERSION_TAG}.tar.gz -C /site/gpf19
-RUN tar zxvf /gpfjs-dist-gpf38-${VERSION_TAG}.tar.gz -C /site/gpf38
-RUN tar zxvf /gpfjs-dist-gpf_test-${VERSION_TAG}.tar.gz -C /site/gpf_test
+RUN tar zxvf /gpfjs-dist-gpf19-3.0.0.80.tar.gz -C /site/gpf19
+RUN tar zxvf /gpfjs-dist-gpf38-3.0.0.80.tar.gz -C /site/gpf38
+RUN tar zxvf /gpfjs-dist-gpf_test-3.0.0.80.tar.gz -C /site/gpf_test
+
+
+# STAGE
+ARG VERSION_TAG
+
+COPY gpfjs-dist-hg19-${VERSION_TAG}.tar.gz /
+COPY gpfjs-dist-hg38-${VERSION_TAG}.tar.gz /
+COPY gpfjs-dist-hg_test-${VERSION_TAG}.tar.gz /
+
+RUN mkdir -p /site/hg19 && mkdir -p /site/hg38 && mkdir -p /site/hg_test
+
+RUN tar zxvf /gpfjs-dist-hg19-${VERSION_TAG}.tar.gz -C /site/hg19
+RUN tar zxvf /gpfjs-dist-hg38-${VERSION_TAG}.tar.gz -C /site/hg38
+RUN tar zxvf /gpfjs-dist-hg_test-${VERSION_TAG}.tar.gz -C /site/hg_test
 
 WORKDIR /site
 
