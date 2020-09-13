@@ -40,6 +40,11 @@ echo "BRANCH      : $BRANCH"
 docker build seqpipe-builder/ -t "seqpipe/seqpipe-builder:${TAG}"
 docker build seqpipe-builder/ -t "seqpipe/seqpipe-builder:latest"
 
+cd seqpipe-http
+./build_http.sh ${TAG} ${BRANCH}
+cd -
+
+
 cd seqpipe-gpfjs
 ./build_gpfjs.sh ${TAG} ${BRANCH}
 cd -
@@ -53,7 +58,7 @@ cd seqpipe-gpf-full
 ./build_gpf_full.sh ${TAG} ${BRANCH}
 cd -
 
-for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full; do
+for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full seqpipe-http; do
     echo "pushing docker image: ${repo}:${TAG}"
     docker push seqpipe/${repo}:${TAG}
     docker push seqpipe/${repo}:latest

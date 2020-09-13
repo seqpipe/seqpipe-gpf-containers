@@ -3,7 +3,8 @@ FROM seqpipe/seqpipe-anaconda-base:latest
 RUN apt-get update --fix-missing && \
 	apt-get install -y build-essential gcc vim wget curl git libgl1-mesa-glx \
 		supervisor less vim \
-    	inetutils-ping net-tools apt-utils && \
+    	inetutils-ping net-tools apt-utils \
+		mysql-client && \
 		apt-get clean
 
 
