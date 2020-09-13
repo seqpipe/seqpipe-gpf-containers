@@ -29,10 +29,7 @@ ENV APACHE_RUN_DIR=/var/run/apache2
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
 
-COPY sites-available/localhost.conf /etc/apache2/sites-available/
-
 # RUN a2enmod headers ssl
-RUN a2ensite localhost
 
 RUN cat /etc/hostname | awk '{print "ServerName "$1}' >> /etc/apache2/apache2.conf
 
