@@ -2,6 +2,9 @@
 
 set -e
 
+mkdir -p /site/hg19
+mkdir -p /site/hg38
+
 for sitename in ${APACHE2_GPF_SITES}; do
     echo "enabling apache site: ${sitename}..."
     a2ensite $sitename
