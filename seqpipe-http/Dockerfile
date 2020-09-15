@@ -1,4 +1,4 @@
-FROM amd64/ubuntu:18.04 as gpfjs-base
+FROM amd64/ubuntu:18.04
 
 SHELL ["/bin/bash", "-c"]
 
@@ -12,14 +12,6 @@ RUN apt-get update --fix-missing && \
 
 ARG VERSION_TAG
 
-COPY gpfjs-dist-default-${VERSION_TAG}.tar.gz /
-
-RUN mkdir -p /site/gpf
-
-RUN tar zxvf /gpfjs-dist-default-${VERSION_TAG}.tar.gz -C /site/gpf
-
-WORKDIR /site
-
 RUN mkdir -p /var/run/apache2
 
 ENV APACHE_LOG_DIR=/var/log/apache2
@@ -29,7 +21,7 @@ ENV APACHE_RUN_DIR=/var/run/apache2
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
 
-# RUN a2enmod headers ssl
+RUN a2enmod headers ssl
 
 RUN cat /etc/hostname | awk '{print "ServerName "$1}' >> /etc/apache2/apache2.conf
 

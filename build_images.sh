@@ -21,8 +21,6 @@ fi
 
 ((GPF_BUILD+=1))
 
-# export BRANCH="release-3.0.0"
-
 export BRANCH="master"
 
 
@@ -42,22 +40,29 @@ echo "BRANCH      : $BRANCH"
 docker build seqpipe-builder/ -t "seqpipe/seqpipe-builder:${TAG}"
 docker build seqpipe-builder/ -t "seqpipe/seqpipe-builder:latest"
 
+cd seqpipe-http
+./build_http.sh ${TAG} ${BRANCH}
+cd -
+
+
 cd seqpipe-gpfjs
 ./build_gpfjs.sh ${TAG} ${BRANCH}
 cd -
+cp seqpipe-gpfjs/gpfjs-dist-default-${TAG}.tar.gz seqpipe-gpf-full
 
 cd seqpipe-gpf
 ./build_gpf.sh ${TAG} ${BRANCH}
 cd -
 
-docker push seqpipe/seqpipe-builder:${TAG}
-docker push seqpipe/seqpipe-builder:latest
+cd seqpipe-gpf-full
+./build_gpf_full.sh ${TAG} ${BRANCH}
+cd -
 
-docker push seqpipe/seqpipe-gpfjs:${TAG}
-docker push seqpipe/seqpipe-gpfjs:latest
-
-docker push seqpipe/seqpipe-gpf:${TAG}
-docker push seqpipe/seqpipe-gpf:latest
+for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full seqpipe-http; do
+    echo "pushing docker image: ${repo}:${TAG}"
+    docker push seqpipe/${repo}:${TAG}
+    docker push seqpipe/${repo}:latest
+done
 
 
 cd seqpipe-gpfjs/gpfjs
@@ -76,3 +81,5 @@ echo $GPF_BUILD > GPF_BUILD.txt
 git add GPF_BUILD.txt
 git commit -m "new build done"
 git push origin --tags
+
+echo $GPF_BUILD > GPF_BUILD.txt
