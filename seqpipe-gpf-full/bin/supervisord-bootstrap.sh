@@ -34,8 +34,8 @@ sed -i "s/\/\/ gtag/gtag('config', '${GOOGLE_ANALYTICS_UA}');/g" /site/gpf/index
 fi
 
 if [[ ! -z "${GPF_PREFIX}" ]]; then
-sed -i "s/.*<base href=.*>/  <base href='\/${GPF_PREFIX}'>/g" /site/gpf/index.html
-# sed -i "s/.*<base href=.*\/>/  <base href=/\"${GPF_PREFIX}\"/g" /site/gpf/index.html
+sed -i "s/gpf_prefix/${GPF_PREFIX}/g" /site/gpf/index.html
+sed -i "s/gpf_prefix/${GPF_PREFIX}/g" /etc/apache2/sites-available/localhost.conf
 
 fi
 
