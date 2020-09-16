@@ -64,7 +64,10 @@ docker run --rm -d \
     -e WDAE_ALLOWED_HOST="*" \
     -e WDAE_DEBUG="True" \
     -e WDAE_PUBLIC_HOSTNAME="locahost" \
-    -e WDAE_PREFIX="/" \
-    -e IMPALA_HOSTS="pooh.seqpipe.org" \
+    -e GPF_PREFIX="gpf" \
+    -e WDAE_PREFIX="gpf" \
+    -e IMPALA_HOSTS="seqclust0.seqpipe.org" \
     seqpipe/seqpipe-gpf-full:latest
+
+
 
