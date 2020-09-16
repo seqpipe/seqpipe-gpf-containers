@@ -4,7 +4,7 @@ set -e
 
 for impala_host in ${IMPALA_HOSTS}; do
     echo "waiting for impala on ${impala_host}..."
-    /wait-for-it.sh ${impala_host}:25000 -t 300
+    /wait-for-it.sh ${impala_host}:21050 -t 300
     echo "done..."
 done
 
