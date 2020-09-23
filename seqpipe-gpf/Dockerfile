@@ -35,20 +35,18 @@ ENV HADOOP_CONF_DIR /opt/conda/envs/gpf/etc/hadoop
 
 WORKDIR /code/wdae
 
-COPY ./gpf_index.wsgi /code/wdae/wdae/wdae/wsgi.py
+COPY ./wdae.wsgi /code/wdae/wdae/wdae/wsgi.py
 
-COPY ./gpf_index.wsgi /code/wdae/wdae/wdae/gunicorn_wsgi.py
+COPY ./gunicorn.wsgi /code/wdae/wdae/wdae/gunicorn_wsgi.py
 
 COPY ./settings.py /code/wdae/wdae/wdae/settings.py
+COPY ./gunicorn_settings.py /code/wdae/wdae/wdae/gunicorn_settings.py
 
-RUN cd /code/dae && pip install . && cd /code/wdae && pip install . && cd /code
+RUN cd /code/dae && pip install . && cd /code/wdae && pip install . && cd /
 
 RUN mkdir -p /logs
 
-COPY ./wdaemanage.py /code/wdae/wdae/wdaemanage.py
-
-RUN ln -s /code/wdae/wdae/wdaemanage.py /bin/wdaemanage.py
-
+# RUN ln -s /code/wdae/wdae/wdaemanage.py /bin/wdaemanage.py
 # CMD /code/wdae/wdae/wdaemanage.py migrate && /code/start_gunicorn.sh
 
 ADD ./supervisor/supervisord.conf /etc/

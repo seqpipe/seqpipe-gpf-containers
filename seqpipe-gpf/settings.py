@@ -34,7 +34,7 @@ from .default_settings import *
 
 SECRET_KEY = os.environ.get("WDAE_SECRET_KEY")
 
-STUDIES_EAGER_LOADING = True
+STUDIES_EAGER_LOADING = False
 
 
 if os.environ.get("SENTRY_API_URL", None):

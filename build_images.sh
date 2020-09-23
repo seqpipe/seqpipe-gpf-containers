@@ -44,6 +44,8 @@ cd seqpipe-http
 ./build_http.sh ${TAG} ${BRANCH}
 cd -
 
+rm -f seqpipe-gpfjs/gpfjs-dist-*.tar.gz
+rm -f seqpipe-gpf-full/gpfjs-dist-*.tar.gz
 
 cd seqpipe-gpfjs
 ./build_gpfjs.sh ${TAG} ${BRANCH}
