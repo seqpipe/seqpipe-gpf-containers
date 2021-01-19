@@ -81,7 +81,7 @@ WDAE_PREFIX = os.environ.get("WDAE_PREFIX")
 
 
 EMAIL_VERIFICATION_HOST = f"https://{ WDAE_PUBLIC_HOSTNAME }/{ WDAE_PREFIX }"
-EMAIL_VERIFICATION_PATH = '/(popup:validate/{})'
+EMAIL_VERIFICATION_PATH = '/validate/{}'
 # EMAIL_OVERRIDE = ['lubomir.chorbadjiev@gmail.com']
 
 DEFAULT_RENDERER_CLASSES = [
