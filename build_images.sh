@@ -22,7 +22,8 @@ fi
 ((GPF_BUILD+=1))
 
 # export BRANCH="master"
-export BRANCH="release-3.3"
+# export BRANCH="release-3.3"
+export BRANCH="release-3.2.0"
 
 
 echo "VERSION     : ${VERSION_NUMBER}"
