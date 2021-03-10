@@ -163,13 +163,13 @@ LOGGING = {
             "propagate": True,
             "level": "INFO",
         },
-        # 'django.request': {
-        #     'handlers': ['console'],
-        #     'level': 'WARN',
-        #     'propagate': True,
-        # },
+        'django.request': {
+            'handlers': ['logfile', "logdebug"],
+            'level': 'INFO',
+            'propagate': True,
+        },
         "wdae.api": {
-            "handlers": ["logfile"],
+            "handlers": ["logfile", "logdebug"],
             "level": "DEBUG",
             "propagate": True,
         },
@@ -190,7 +190,6 @@ LOGGING = {
         },
     },
 }
-
 
 CACHES = {
     'default': {

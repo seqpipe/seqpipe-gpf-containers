@@ -39,13 +39,13 @@ git checkout $BRANCH
 git pull
 cd -
 
-# "seqpipe/seqpipe-builder:${TAG}" \
+# "seqpipe/seqpipe-builder:3.2.8.165" \
 
 
 docker run \
     -v "${WORKSPACE}:/work" \
     --user 1000:1000 \
-    "seqpipe/seqpipe-builder:3.2.8.165" \
+    "seqpipe/seqpipe-builder:${TAG}" \
     /work/package_gpfjs.sh ${TAG}
 
 
