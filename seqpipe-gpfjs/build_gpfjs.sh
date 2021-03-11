@@ -51,8 +51,12 @@ echo "WD=${WD}"
 
 # "seqpipe/seqpipe-builder:3.2.8.165" \
 
+export USER=$(whoami)
+
+echo "USER=${USER}"
 
 docker run \
+    -u "${USER}:{USER}" \
     -v "${WD}:/work" \
     --user 1000:1000 \
     "${REGISTRY}/seqpipe-builder:${TAG}" \

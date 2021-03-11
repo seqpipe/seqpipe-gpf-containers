@@ -10,8 +10,6 @@ else
     exit 1
 fi
 
-chown -R 1000:1000 /work/gpfjs
-
 cd /work/gpfjs
 
 ls -l .
