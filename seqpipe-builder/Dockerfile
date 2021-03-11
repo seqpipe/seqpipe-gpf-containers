@@ -26,10 +26,13 @@ RUN apt install -y nodejs
 RUN npm install -g @angular/cli
 # RUN npm install -g protractor
 
-RUN mkdir /.npm && chmod -R 0777 /.npm
-RUN mkdir /.config && chmod -R 0777 /.config
+RUN mkdir /.npm && chown -R 1000:1000 /.npm
+RUN mkdir /.config && chown -R 1000:1000 /.config
 
-RUN mkdir -p /work
+RUN mkdir -p ~/.npm && chown -R 1000:1000 ~/.npm
+# RUN chown -R `whoami` /usr/local/lib/node_modules
+
+RUN mkdir -p /work && chown -R 1000:1000 /work
 
 WORKDIR /work
 
