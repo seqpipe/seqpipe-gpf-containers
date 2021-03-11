@@ -28,7 +28,7 @@ else
 fi
 
 if [ "$3" ]; then
-    export GPF_BRANCH=$2
+    export GPF_BRANCH=$3
     echo "GPF_BRANCH=${GPF_BRANCH}"
 else
     echo 'GPF_BRANCH argument is empty; assuming master branch'
