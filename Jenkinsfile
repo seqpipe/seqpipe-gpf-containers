@@ -6,8 +6,8 @@ pipeline {
         booleanParam(
             name: 'PUBLISH', defaultValue: false, 
             description: 'Publish docker images on dockerhub')
-        integerParam(
-            name: 'GPF_BUILD', defaultValue: -1,
+        string(
+            name: 'GPF_BUILD', defaultValue: "-1",
             description: 'gpf build number to use for tagging docker images')
         
     }    
