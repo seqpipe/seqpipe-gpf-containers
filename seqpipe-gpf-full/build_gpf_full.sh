@@ -18,15 +18,25 @@ else
     exit 1
 fi
 
+if [ "$3" ]; then
+    export REGISTRY=$3
+    echo "REGISTRY=${REGISTRY}"
+else
+    echo 'ERROR: requires a non-empty REGISTRY'
+    exit 1
+fi
 
 if [ -z $WORKSPACE ];
 then
-    export WORKSPACE=`pwd`
+    export WD=`pwd`
+else
+    export WD=${WORKSPACE}/seqpipe-gpf-full
 fi
 
 echo "WORKSPACE=${WORKSPACE}"
+echo "WD=${WD}"
 
 
-docker build . -t seqpipe/seqpipe-gpf-full:${TAG} --build-arg VERSION_TAG=${TAG}
-docker build . -t seqpipe/seqpipe-gpf-full:latest --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpf-full:${TAG} --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpf-full:latest --build-arg VERSION_TAG=${TAG}
 

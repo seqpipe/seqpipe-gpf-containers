@@ -18,36 +18,46 @@ else
     exit 1
 fi
 
+if [ "$3" ]; then
+    export REGISTRY=$3
+    echo "REGISTRY=${REGISTRY}"
+else
+    echo 'ERROR: requires a non-empty REGISTRY'
+    exit 1
+fi
 
 if [ -z $WORKSPACE ];
 then
-    export WORKSPACE=`pwd`
+    export WD=`pwd`
+else
+    export WD=${WORKSPACE}/seqpipe-gpfjs
 fi
 
 echo "WORKSPACE=${WORKSPACE}"
+echo "WD=${WD}"
 
-if [ ! -d gpfjs ];
-then
-    git clone git@github.com:iossifovlab/gpfjs.git
-fi
+# if [ ! -d gpfjs ];
+# then
+#     git clone git@github.com:iossifovlab/gpfjs.git
+# fi
 
-cd gpfjs
-git clean --force
-git checkout .
-git pull
-git checkout $BRANCH
-git pull
-cd -
+# cd gpfjs
+# git clean --force
+# git checkout .
+# git pull
+# git checkout $BRANCH
+# git pull
+# cd -
 
 # "seqpipe/seqpipe-builder:3.2.8.165" \
 
 
 docker run \
-    -v "${WORKSPACE}:/work" \
+    -v "${WD}:/work" \
     --user 1000:1000 \
-    "seqpipe/seqpipe-builder:${TAG}" \
+    "${REGISTRY}/seqpipe-builder:${TAG}" \
     /work/package_gpfjs.sh ${TAG}
 
 
-docker build . -t seqpipe/seqpipe-gpfjs:${TAG} --build-arg VERSION_TAG=${TAG}
-docker build . -t seqpipe/seqpipe-gpfjs:latest --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpfjs:${TAG} --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpfjs:latest --build-arg VERSION_TAG=${TAG}
