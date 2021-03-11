@@ -133,6 +133,6 @@ cd -
 git tag -f ${TAG}
 echo $GPF_BUILD > GPF_BUILD.txt
 
-git add GPF_BUILD.txt
-git commit -m "new build done"
-git push origin --tags
+# git add GPF_BUILD.txt
+# git commit -m "new build done"
+# git push origin --tags
