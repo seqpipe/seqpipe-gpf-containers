@@ -19,31 +19,43 @@ else
     exit 1
 fi
 
+if [ "$3" ]; then
+    export REGISTRY=$3
+    echo "REGISTRY=${REGISTRY}"
+else
+    echo 'ERROR: requires a non-empty REGISTRY'
+    exit 1
+fi
+
+
 if [ -z $WORKSPACE ];
 then
-    export WORKSPACE=`pwd`
+    export WD=`pwd`
+else
+    export WD=${WORKSPACE}/seqpipe-gpf
 fi
 
 echo "WORKSPACE=${WORKSPACE}"
+echo "WD=${WD}"
 
-if [ ! -d gpf ];
-then
-    git clone git@github.com:iossifovlab/gpf.git
-fi
+# if [ ! -d gpf ];
+# then
+#     git clone git@github.com:iossifovlab/gpf.git
+# fi
 
-cd gpf
+# cd gpf
 
-git clean --force
-git checkout .
-git pull
-git checkout $BRANCH
-git pull
+# git clean --force
+# git checkout .
+# git pull
+# git checkout $BRANCH
+# git pull
 
-cd -
+# cd -
 
 
-docker build . -t seqpipe/seqpipe-gpf:${TAG} --build-arg VERSION_TAG=${TAG}
-docker build . -t seqpipe/seqpipe-gpf:latest --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpf:${TAG} --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpf:latest --build-arg VERSION_TAG=${TAG}
 
 cd gpf
 git tag -f ${TAG}
