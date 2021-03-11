@@ -27,6 +27,14 @@ else
     exit 1
 fi
 
+if [ "$3" ]; then
+    export GPF_BRANCH=$2
+    echo "GPF_BRANCH=${GPF_BRANCH}"
+else
+    echo 'GPF_BRANCH argument is empty; assuming master branch'
+    export GPF_BRANCH="master"
+fi
+
 
 if [ $GPF_BUILD == "-1" ];
 then
@@ -42,11 +50,6 @@ then
     echo $GPF_BUILD > GPF_BUILD.txt
 fi
 
-
-if [ -z $BRANCH ];
-then
-    export BRANCH="master"
-fi
 
 if [ ${PUBLISH} == "false" ];
 then
@@ -64,7 +67,7 @@ fi
 
 
 # prepare sources
-${WORKSPACE}/prepare_sources.sh ${BRANCH}
+${WORKSPACE}/prepare_sources.sh ${GPF_BRANCH}
 
 cd ${WORKSPACE}
 
@@ -80,22 +83,20 @@ echo "GPF_BUILD   : ${GPF_BUILD}"
 export TAG="${GPF_VERSION}.${GPF_BUILD}"
 
 echo "TAG         : $TAG"
-echo "BRANCH      : $BRANCH"
+echo "GPF_BRANCH      : $GPF_BRANCH"
 
 
 
 docker build seqpipe-builder/ -t "${REGISTRY}/seqpipe-builder:${TAG}"
-# docker push "${REGISTRY}/seqpipe-builder:${TAG}"
-
 docker build seqpipe-builder/ -t "${REGISTRY}/seqpipe-builder:latest"
-# docker push "${REGISTRY}/seqpipe-builder:latest"
+
 
 cd seqpipe-http
-./build_http.sh ${TAG} ${BRANCH} ${REGISTRY}
+./build_http.sh ${TAG} ${GPF_BRANCH} ${REGISTRY}
 cd ${WORKSPACE}
 
 cd seqpipe-gpf
-./build_gpf.sh ${TAG} ${BRANCH} ${REGISTRY}
+./build_gpf.sh ${TAG} ${GPF_BRANCH} ${REGISTRY}
 cd ${WORKSPACE}
 
 
@@ -103,13 +104,13 @@ rm -f seqpipe-gpfjs/gpfjs-dist-*.tar.gz
 rm -f seqpipe-gpf-full/gpfjs-dist-*.tar.gz
 
 cd seqpipe-gpfjs
-./build_gpfjs.sh ${TAG} ${BRANCH} ${REGISTRY}
+./build_gpfjs.sh ${TAG} ${GPF_BRANCH} ${REGISTRY}
 cd ${WORKSPACE}
 
 cp seqpipe-gpfjs/gpfjs-dist-default-${TAG}.tar.gz seqpipe-gpf-full
 
 cd seqpipe-gpf-full
-./build_gpf_full.sh ${TAG} ${BRANCH} ${REGISTRY}
+./build_gpf_full.sh ${TAG} ${GPF_BRANCH} ${REGISTRY}
 cd ${WORKSPACE}
 
 for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full seqpipe-http; do

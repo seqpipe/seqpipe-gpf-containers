@@ -10,13 +10,17 @@ pipeline {
             name: 'GPF_BUILD', defaultValue: "-1",
             description: 'gpf build number to use for tagging docker images')
         
+        string(
+            name: 'GPF_BRANCH', defaultValue: "master",
+            description: 'gpf branch to use for building docker images')
     }    
     environment {
         GPF_BUILD="$params.GPF_BUILD"
+        GPF_BRANCH="$params.GPF_BRANCH"
         PUBLISH="$params.PUBLISH"
     }
     options { 
-        copyArtifactPermission('/iossifovlab/gpf/*,/iossifovlab/gpf/master,/seqpipe/gpf_documentation/*');
+        copyArtifactPermission('/iossifovlab/gpf/*,/iossifovlab/gpfjs/*,/iossifovlab/gpf/master,/seqpipe/gpf_documentation/*');
         disableConcurrentBuilds();
     }
     triggers {
@@ -36,11 +40,10 @@ pipeline {
                 sh '''
                     echo "WORKSPACE=${WORKSPACE}"
                     cd ${WORKSPACE}
-                    ./build_images.sh ${PUBLISH} ${GPF_BUILD}
+                    ./build_images.sh ${PUBLISH} ${GPF_BUILD} ${GPF_BRANCH}
                 '''
             }
         }
-
     }
     post {
         always {
