@@ -51,6 +51,8 @@ echo "WD=${WD}"
 
 # "seqpipe/seqpipe-builder:3.2.8.165" \
 
+chmod 0777 -R ${WD}/gpfjs
+
 export USER=$(whoami)
 
 echo "USER=${USER}"
