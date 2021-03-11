@@ -9,43 +9,57 @@ fi
 
 echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 
-if [ -z $GPF_BUILD ];
+
+if [ "$1" ]; then
+    export PUBLISH=$1
+    echo "PUBLISH=${PUBLISH}"
+else
+    echo 'ERROR: requires a non-empty version PUBLISH argument'
+    exit 1
+fi
+
+
+if [ "$2" ]; then
+    export GPF_BUILD=$2
+    echo "GPF_BUILD=${GPF_BUILD}"
+else
+    echo 'ERROR: requires a non-empty GPF_BUILD argument'
+    exit 1
+fi
+
+
+if [ $GPF_BUILD == "-1" ];
 then
-
-    if [ -z $BUILD_NUMBER ]; then
-        if [ -f "GPF_BUILD.txt" ];
-        then
-            export GPF_BUILD=$(cat GPF_BUILD.txt)
-        fi
-        if [ -z $GPF_BUILD ]; then
-            export GPF_BUILD=0
-        fi
-
-        ((GPF_BUILD+=1))
-        echo $GPF_BUILD > GPF_BUILD.txt
-    else
-        export GPF_BUILD=${BUILD_NUMBER}
+    if [ -f "GPF_BUILD.txt" ];
+    then
+        export GPF_BUILD=$(cat GPF_BUILD.txt)
+    fi
+    if [ -z $GPF_BUILD ]; then
+        export GPF_BUILD=0
     fi
 
-else
-
-    echo "external GPF_BUILD: ${GPF_BUILD}"
+    ((GPF_BUILD+=1))
+    echo $GPF_BUILD > GPF_BUILD.txt
 fi
 
 
 if [ -z $BRANCH ];
 then
-    # export BRANCH="master"
-    export BRANCH="release-3.3"
-    # export BRANCH="release-3.2.0"
+    export BRANCH="master"
 fi
 
-if [ -z ${PUBLISH} ];
+if [ ${PUBLISH} == "false" ];
 then
-    echo "Using local docker repository: registry.seqpipe.org:5000"
+    echo "Using local docker registry: registry.seqpipe.org:5000"
     export REGISTRY="registry.seqpipe.org:5000"
 else
-    export REGISTRY="seqpipe"
+    if [ ${PUBLISH} == "true" ];
+    then
+        echo "Using dockerhub registry: seqpipe"
+        export REGISTRY="seqpipe"
+    else
+        exit 1
+    fi
 fi
 
 
@@ -78,11 +92,11 @@ docker build seqpipe-builder/ -t "${REGISTRY}/seqpipe-builder:latest"
 
 cd seqpipe-http
 ./build_http.sh ${TAG} ${BRANCH} ${REGISTRY}
-cd -
+cd ${WORKSPACE}
 
 cd seqpipe-gpf
 ./build_gpf.sh ${TAG} ${BRANCH} ${REGISTRY}
-cd -
+cd ${WORKSPACE}
 
 
 rm -f seqpipe-gpfjs/gpfjs-dist-*.tar.gz
@@ -90,35 +104,34 @@ rm -f seqpipe-gpf-full/gpfjs-dist-*.tar.gz
 
 cd seqpipe-gpfjs
 ./build_gpfjs.sh ${TAG} ${BRANCH} ${REGISTRY}
-cd -
+cd ${WORKSPACE}
+
 cp seqpipe-gpfjs/gpfjs-dist-default-${TAG}.tar.gz seqpipe-gpf-full
 
 cd seqpipe-gpf-full
 ./build_gpf_full.sh ${TAG} ${BRANCH} ${REGISTRY}
+cd ${WORKSPACE}
+
+for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full seqpipe-http; do
+    echo "pushing docker image: ${repo}:${TAG}"
+    docker push ${REGISTRY}/${repo}:${TAG}
+    docker push ${REGISTRY}/${repo}:latest
+done
+
+
+cd seqpipe-gpfjs/gpfjs
+git tag -f ${TAG}
+git push origin --tags
 cd -
 
-# for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full seqpipe-http; do
-#     echo "pushing docker image: ${repo}:${TAG}"
-#     docker push seqpipe/${repo}:${TAG}
-#     docker push seqpipe/${repo}:latest
-# done
+cd seqpipe-gpf/gpf
+git tag -f ${TAG}
+git push origin --tags
+cd -
 
+git tag -f ${TAG}
+echo $GPF_BUILD > GPF_BUILD.txt
 
-# cd seqpipe-gpfjs/gpfjs
-# git tag -f ${TAG}
-# git push origin --tags
-# cd -
-
-# cd seqpipe-gpf/gpf
-# git tag -f ${TAG}
-# git push origin --tags
-# cd -
-
-# git tag -f ${TAG}
-# echo $GPF_BUILD > GPF_BUILD.txt
-
-# git add GPF_BUILD.txt
-# git commit -m "new build done"
-# git push origin --tags
-
-# echo $GPF_BUILD > GPF_BUILD.txt
+git add GPF_BUILD.txt
+git commit -m "new build done"
+git push origin --tags
