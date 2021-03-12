@@ -36,6 +36,14 @@ fi
 echo "WORKSPACE=${WORKSPACE}"
 echo "WD=${WD}"
 
+echo "[package_gpfjs] going to remove node_modules..."
+
+# clean node_modules
+docker run -d --rm \
+    -v ${WD}:/work \
+    busybox:latest \
+    /bin/sh -c "rm -rf /work/gpfjs/node_modules && rm -rf /work/gpfjs/package-lock.json"
+
 # if [ ! -d gpfjs ];
 # then
 #     git clone git@github.com:iossifovlab/gpfjs.git
@@ -53,14 +61,8 @@ echo "WD=${WD}"
 
 chmod 0777 -R ${WD}/gpfjs
 
-export USER=$(whoami)
-
-echo "USER=${USER}"
-
 docker run \
-    -u "${USER}:{USER}" \
     -v "${WD}:/work" \
-    --user 1000:1000 \
     "${REGISTRY}/seqpipe-builder:${TAG}" \
     /work/package_gpfjs.sh ${TAG}
 

@@ -120,18 +120,18 @@ for repo in seqpipe-builder seqpipe-gpfjs seqpipe-gpf seqpipe-gpf-full seqpipe-h
 done
 
 
-cd seqpipe-gpfjs/gpfjs
-git tag -f ${TAG}
-git push origin --tags
-cd -
+# cd seqpipe-gpfjs/gpfjs
+# git tag -f ${TAG}
+# git push origin --tags
+# cd -
 
-cd seqpipe-gpf/gpf
-git tag -f ${TAG}
-git push origin --tags
-cd -
+# cd seqpipe-gpf/gpf
+# git tag -f ${TAG}
+# git push origin --tags
+# cd -
 
-git tag -f ${TAG}
-echo $GPF_BUILD > GPF_BUILD.txt
+# git tag -f ${TAG}
+# echo $GPF_BUILD > GPF_BUILD.txt
 
 # git add GPF_BUILD.txt
 # git commit -m "new build done"

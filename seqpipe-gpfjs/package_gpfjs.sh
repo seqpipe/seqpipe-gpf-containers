@@ -14,10 +14,6 @@ cd /work/gpfjs
 
 ls -l .
 
-
-echo "[package_gpfjs] going to remove node_modules..."
-rm -rf node_modules package-lock.json
-
 echo "[package_gpfjs] going to run npm install..."
 npm install
 

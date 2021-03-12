@@ -19,6 +19,11 @@ fi
 
 echo "WORKSPACE=${WORKSPACE}"
 
+# clean node_modules
+docker run -d --rm \
+    -v ${WORKSPACE}/seqpipe-gpfjs:/work \
+    busybox:latest \
+    /bin/sh -c "rm -rf /work/gpfjs/node_modules && rm -rf /work/gpfjs/package-lock.json"
 
 # GPF
 cd seqpipe-gpf
