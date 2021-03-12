@@ -32,12 +32,15 @@ docker run --rm \
     /bin/sh -c "rm -rf /work/gpfjs/dist"
 
 # GPF
+echo "[prepare_sources] cloning gpf..."
 cd seqpipe-gpf
 
 if [ ! -d gpf ];
 then
     git clone git@github.com:iossifovlab/gpf.git
 fi
+
+echo "[prepare_sources] checkout and pull gpf ${BRANCH} branch..."
 
 cd gpf
 
@@ -51,12 +54,15 @@ cd $WORKSPACE
 
 # GPFJS
 
+echo "[prepare_sources] cloning gpfjs..."
 cd seqpipe-gpfjs
 
 if [ ! -d gpfjs ];
 then
     git clone git@github.com:iossifovlab/gpfjs.git
 fi
+
+echo "[prepare_sources] checkout and pull gpfjs ${BRANCH} branch..."
 
 cd gpfjs
 git clean --force
