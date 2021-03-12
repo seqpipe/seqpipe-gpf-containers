@@ -20,10 +20,16 @@ fi
 echo "WORKSPACE=${WORKSPACE}"
 
 # clean node_modules
-docker run -d --rm \
+docker run --rm \
     -v ${WORKSPACE}/seqpipe-gpfjs:/work \
     busybox:latest \
     /bin/sh -c "rm -rf /work/gpfjs/node_modules && rm -rf /work/gpfjs/package-lock.json"
+
+# clean gpfjs distribution
+docker run --rm \
+    -v ${WORKSPACE}/seqpipe-gpfjs:/work \
+    busybox:latest \
+    /bin/sh -c "rm -rf /work/gpfjs/dist"
 
 # GPF
 cd seqpipe-gpf
