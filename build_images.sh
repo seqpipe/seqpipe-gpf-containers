@@ -38,16 +38,12 @@ fi
 
 if [ $GPF_BUILD == "-1" ];
 then
-    if [ -f "GPF_BUILD.txt" ];
+    if [ -z ${BUILD_NUMBER} ];
     then
-        export GPF_BUILD=$(cat GPF_BUILD.txt)
+        export GPF_BUILD=1000
+    else
+        export GPF_BUILD=${BUILD_NUMBER}
     fi
-    if [ -z $GPF_BUILD ]; then
-        export GPF_BUILD=0
-    fi
-
-    ((GPF_BUILD+=1))
-    echo $GPF_BUILD > GPF_BUILD.txt
 fi
 
 
