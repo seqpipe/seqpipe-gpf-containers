@@ -38,13 +38,16 @@ fi
 
 if [ $GPF_BUILD == "-1" ];
 then
-    if [ -z ${BUILD_NUMBER} ];
-    then
-        export GPF_BUILD=1000
-    else
-        export GPF_BUILD=${BUILD_NUMBER}
-    fi
+    export GPF_BUILD=0
 fi
+
+if [ -z ${BUILD_NUMBER} ];
+then
+    export GPF_BUILD="${GPF_BUILD}_0"
+else
+    export GPF_BUILD="${GPF_BUILD}_${BUILD_NUMBER}"
+fi
+
 
 
 if [ ${PUBLISH} == "false" ];
@@ -68,7 +71,6 @@ ${WORKSPACE}/prepare_sources.sh ${GPF_BRANCH}
 cd ${WORKSPACE}
 
 export GPF_VERSION=$(cat seqpipe-gpf/gpf/VERSION)
-
 export GPF_SERIES=$(cut -d "." -f 1-2 seqpipe-gpf/gpf/VERSION)
 
 
@@ -79,7 +81,7 @@ echo "GPF_BUILD   : ${GPF_BUILD}"
 export TAG="${GPF_VERSION}.${GPF_BUILD}"
 
 echo "TAG         : $TAG"
-echo "GPF_BRANCH      : $GPF_BRANCH"
+echo "GPF_BRANCH  : $GPF_BRANCH"
 
 
 
