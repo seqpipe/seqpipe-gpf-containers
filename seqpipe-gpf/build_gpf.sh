@@ -54,7 +54,7 @@ echo "WD=${WD}"
 # cd -
 
 
-docker build --no-cache . -t ${REGISTRY}/seqpipe-gpf:${TAG} --build-arg VERSION_TAG=${TAG}
+docker build . -t ${REGISTRY}/seqpipe-gpf:${TAG} --build-arg VERSION_TAG=${TAG}
 docker build . -t ${REGISTRY}/seqpipe-gpf:latest --build-arg VERSION_TAG=${TAG}
 
 cd gpf
