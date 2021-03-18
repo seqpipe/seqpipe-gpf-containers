@@ -51,6 +51,16 @@ pipeline {
                 topic: "${env.JOB_NAME}"
             )      
         }
+        success {
+
+            script {
+                def job_result = build job: 'seqpipe/gpf-e2e/master', propagate: true, wait: false, parameters: [
+                    string(name: 'GPF_BRANCH', value: "master"),
+                    string(name: 'GPF_TAG', value: 'latest')
+                ]
+            }
+        }
+
 
     }
 }
