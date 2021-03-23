@@ -35,8 +35,18 @@ fi
 
 echo "WORKSPACE=${WORKSPACE}"
 echo "WD=${WD}"
+export seqpipe_gpf="${REGISTRY}/seqpipe-gpf:latest"
+
+sed \
+    s/":REGISTRY:/${REGISTRY}/"g \
+    Dockerfile  > Dockerfile.build
 
 
-docker build . -t ${REGISTRY}/seqpipe-gpf-full:${TAG} --build-arg VERSION_TAG=${TAG}
-docker build . -t ${REGISTRY}/seqpipe-gpf-full:latest --build-arg VERSION_TAG=${TAG}
+docker build . -f Dockerfile.build \
+    -t ${REGISTRY}/seqpipe-gpf-full:${TAG} \
+    --build-arg VERSION_TAG=${TAG}
+
+docker build . -f Dockerfile.build \
+    -t ${REGISTRY}/seqpipe-gpf-full:latest \
+    --build-arg VERSION_TAG=${TAG}
 

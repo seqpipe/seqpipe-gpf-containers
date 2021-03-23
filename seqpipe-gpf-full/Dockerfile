@@ -1,4 +1,4 @@
-FROM registry.seqpipe.org:5000/seqpipe-gpf:latest
+FROM :REGISTRY:/seqpipe-gpf:latest
 
 
 SHELL ["/bin/bash", "-c"]
