@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'dory'
+        label 'dory || piglet || pooh'
     }
     parameters {
         booleanParam(
