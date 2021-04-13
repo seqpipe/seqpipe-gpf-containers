@@ -31,8 +31,8 @@ if [ "$3" ]; then
     export GPF_BRANCH=$3
     echo "GPF_BRANCH=${GPF_BRANCH}"
 else
-    echo 'GPF_BRANCH argument is empty; assuming master branch'
-    export GPF_BRANCH="master"
+    echo 'GPF_BRANCH argument is empty; assuming release-3.4 branch'
+    export GPF_BRANCH="release-3.4"
 fi
 
 
@@ -52,8 +52,8 @@ fi
 
 if [ ${PUBLISH} == "false" ];
 then
-    echo "Using local docker registry: registry.seqpipe.org:5000"
-    export REGISTRY="registry.seqpipe.org:5000"
+    echo "Using local docker registry: registry.seqpipe.org"
+    export REGISTRY="registry.seqpipe.org"
 else
     if [ ${PUBLISH} == "true" ];
     then
