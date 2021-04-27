@@ -17,6 +17,7 @@ RUN conda create \
     
 RUN conda install -n gpf -c defaults -c conda-forge gunicorn mysqlclient
 RUN conda install -n gpf -c defaults -c conda-forge -c anaconda mysql-connector-python
+RUN conda install -n gpf -c defaults -c conda-forge raven
 
 RUN conda update -n base -c defaults conda
 
