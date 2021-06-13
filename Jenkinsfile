@@ -26,6 +26,7 @@ pipeline {
         stage('Copy artifacts') {
             steps {
                 copyArtifacts( filter: 'build-env/seqpipe-containers.build-env.sh', fingerprintArtifacts: true, projectName: 'seqpipe/seqpipe-containers/build-scripts')
+                copyArtifacts( filter: 'build-env/gpfjs.build-env.sh', fingerprintArtifacts: true, projectName: 'iossifovlab/gpfjs/build-scripts')
                 copyArtifacts( filter: 'build-env/gpf.build-env.sh', fingerprintArtifacts: true, projectName: 'iossifovlab/gpf/build-scripts')
             }
         }
