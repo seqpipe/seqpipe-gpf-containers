@@ -1,30 +1,18 @@
 pipeline {
     agent {
-        label 'dory || piglet || pooh'
+        label 'dory'
     }
-    parameters {
-        booleanParam(
-            name: 'PUBLISH', defaultValue: false, 
-            description: 'Publish docker images on dockerhub')
-        string(
-            name: 'GPF_BUILD', defaultValue: "-1",
-            description: 'gpf build number to use for tagging docker images')
-        
-        string(
-            name: 'GPF_BRANCH', defaultValue: "master",
-            description: 'gpf branch to use for building docker images')
-    }    
-    environment {
-        GPF_BUILD="$params.GPF_BUILD"
-        GPF_BRANCH="$params.GPF_BRANCH"
-        PUBLISH="$params.PUBLISH"
-    }
-    options { 
+    options {
         copyArtifactPermission('/iossifovlab/gpf/*,/iossifovlab/gpfjs/*,/iossifovlab/gpf/master,/seqpipe/gpf_documentation/*');
         disableConcurrentBuilds();
     }
     triggers {
-        pollSCM('@weekly')
+        pollSCM('* * * * *')
+        cron('H 2 * * *')
+    }
+    environment {
+        BUILD_SCRIPTS_BUILD_DOCKER_REGISTRY_USERNAME = credentials('jenkins-registry.seqpipe.org.user')
+        BUILD_SCRIPTS_BUILD_DOCKER_REGISTRY_PASSWORD_FILE = credentials('jenkins-registry.seqpipe.org.passwd')
     }
     stages {
         stage ('Start') {
@@ -35,32 +23,29 @@ pipeline {
             }
         }
 
-        stage ('Build images') {
+        stage('Copy artifacts') {
             steps {
-                sh '''
-                    echo "WORKSPACE=${WORKSPACE}"
-                    cd ${WORKSPACE}
-                    ./build_images.sh ${PUBLISH} ${GPF_BUILD} ${GPF_BRANCH}
-                '''
+                copyArtifacts( filter: 'build-env/seqpipe-containers.build-env.sh', fingerprintArtifacts: true, projectName: 'seqpipe/seqpipe-containers/build-scripts')
+                copyArtifacts( filter: 'build-env/gpf.build-env.sh', fingerprintArtifacts: true, projectName: 'iossifovlab/gpf/build-scripts')
+            }
+        }
+
+        stage('Generate stages') {
+            steps {
+                sh './build.sh Jenkinsfile.generated-stages'
+                script {
+                    load('Jenkinsfile.generated-stages')
+                }
             }
         }
     }
     post {
         always {
+            archiveArtifacts artifacts: 'build-env/seqpipe-gpf-containers.build-env.sh', fingerprint: true
+
             zulipNotification(
                 topic: "${env.JOB_NAME}"
-            )      
+            )
         }
-        success {
-
-            script {
-                def job_result = build job: 'seqpipe/gpf-e2e/master', propagate: true, wait: false, parameters: [
-                    string(name: 'GPF_BRANCH', value: "master"),
-                    string(name: 'GPF_TAG', value: 'latest')
-                ]
-            }
-        }
-
-
     }
 }
