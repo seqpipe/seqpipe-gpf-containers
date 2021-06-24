@@ -116,8 +116,8 @@ pipeline {
           println(upstream_jobs_symlinks_adjusted["seqpipe/seqpipe-containers/${env.BRANCH_NAME}"])
         }
 	    sh 'rm -f build-env/"' + "${GITHUB_REPOSITORY_NAME}.combined-input.build-env.sh" + '"'
-        copyArtifacts(filter: 'build-env/seqpipe-containers.build-env.sh', fingerprintArtifacts: true, projectName: upstream_jobs_symlinks_adjusted["iossifovlab/gpf/${env.BRANCH_NAME}"])
-        copyArtifacts(filter: 'build-env/seqpipe-containers.build-env.sh', fingerprintArtifacts: true, projectName: upstream_jobs_symlinks_adjusted["iossifovlab/gpfjs/${env.BRANCH_NAME}"])
+        copyArtifacts(filter: 'build-env/gpf.build-env.sh', fingerprintArtifacts: true, projectName: upstream_jobs_symlinks_adjusted["iossifovlab/gpf/${env.BRANCH_NAME}"])
+        copyArtifacts(filter: 'build-env/gpfjs.build-env.sh', fingerprintArtifacts: true, projectName: upstream_jobs_symlinks_adjusted["iossifovlab/gpfjs/${env.BRANCH_NAME}"])
       }
     }
 
