@@ -16,18 +16,24 @@ include libbuild.sh
 include libdefer.sh
 # shellcheck source=build-scripts/liblog.sh
 include liblog.sh
+# shellcheck source=build-scripts/libopt.sh
+include libopt.sh
 
 function main() {
-  local stage="${1-all}"
+  local -A options
+  libopt_parse options stage:all preset:fast clobber:allow_if_matching_values -- "$@"
+
+  local preset="${options["preset"]}"
+  local stage="${options["stage"]}"
+  local clobber="${options["clobber"]}"
 
   libmain_init seqpipe-gpf-containers sgc
-  libmain_init_build_env gpf gpfjs
+  libmain_init_build_env clobber:"$clobber" preset:"$preset" gpf gpfjs
   libmain_save_build_env_on_exit
-  libbuild_init "$stage" registry.seqpipe.org
+  libbuild_init stage:"$stage" registry.seqpipe.org
 
   defer_ret build_run_ctx_reset_all_persistent
-  defer_err build_run_ctx_reset_all_persistent
-  defer_err build_run_ctx_reset
+  defer_ret build_run_ctx_reset
 
   build_stage "Cleanup"
   {
