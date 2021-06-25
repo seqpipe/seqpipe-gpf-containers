@@ -21,14 +21,15 @@ include libopt.sh
 
 function main() {
   local -A options
-  libopt_parse options stage:all preset:fast clobber:allow_if_matching_values -- "$@"
+  libopt_parse options stage:all preset:fast clobber:allow_if_matching_values build_no:0 -- "$@"
 
   local preset="${options["preset"]}"
   local stage="${options["stage"]}"
   local clobber="${options["clobber"]}"
+  local build_no="${options["build_no"]}"
 
   libmain_init seqpipe-gpf-containers sgc
-  libmain_init_build_env clobber:"$clobber" preset:"$preset" gpf gpfjs
+  libmain_init_build_env clobber:"$clobber" preset:"$preset" build_no:"$build_no" gpf gpfjs
   libmain_save_build_env_on_exit
   libbuild_init stage:"$stage" registry.seqpipe.org
 
